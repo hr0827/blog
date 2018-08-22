@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black &amp; White</title>
+    <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}" />
+    <title>青年老屋</title>
 
     <!-- meta -->
     <meta charset="UTF-8">
@@ -21,15 +22,18 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/pace.min.js' %}"></script>
     <script src="{% static 'js/modernizr.custom.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
 
 <body>
 <div class="container">
     <header id="site-header">
         <div class="row">
-            <div class="col-md-4 col-sm-5 col-xs-8">
-                <div class="logo">
-                    <h1><a href="index.html"><b>Black</b> &amp; White</a></h1>
+            <div class="col-md-4 col-sm-5 col-xs- 8" >
+                <div class="logo" >
+                    <a href="/">
+                        <h1><img src="{% static 'img/logo.jpg' %}"></h1>
+                    </a>
                 </div>
             </div><!-- col-md-4 -->
             <div class="col-md-8 col-sm-7 col-xs-4">
@@ -41,19 +45,19 @@
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="cl-effect-11"><a href="index.html" data-hover="首页">首页</a></li>
+                        <ul class="nav navbar-nav navbar-right" style="padding-top: 15px">
+                            <li class="cl-effect-11"><a href="/" data-hover="首页">首页</a></li>
                             <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>
-                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
+                            <li class="cl-effect-11"><a href="{% url 'blog:about' %}" data-hover="关于">关于</a></li>
                             <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
-                <div id="header-search-box">
+                <div id="header-search-box" style="padding-top: 15px">
                     <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
                     <div id="search-form" class="search-form">
-                        <form role="search" method="get" id="searchform" action="#">
-                            <input type="search" placeholder="搜索" required>
+                        <form role="search" method="get" id="searchform" action="{% url 'blog:search' %}">
+                            <input type="search" name="q" placeholder="搜索" required>
                             <button type="submit"><span class="ion-ios-search-strong"></span></button>
                         </form>
                     </div>
@@ -62,17 +66,15 @@
         </div>
     </header>
 </div>
-<div class="copyrights">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>
-<div class="copyrights">Modified by <a href="http://zmrenwu.com/">追梦人物的博客</a></div>
 
-<div class="content-body">
+<div class="con      tent-body">
     <div class="container">
         <div class="row">
-            <main class="col-md-8">
+            <main class="col-md-9">
                 {% block main %}
                 {% endblock main %}
             </main>
-            <aside class="col-md-4">
+            <aside class="col-md-3">
                 {% block toc %}
                 {% endblock toc %}
                 <div class="widget widget-recent-posts">
@@ -94,7 +96,7 @@
                     <ul>
                         {% for date in date_list %}
                         <li>
-                            <a href="#">{{ date.year }} 年 {{ date.month }} 月</a>
+                            <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }} 年 {{ date.month }} 月</a>
                         </li>
                         {% empty %}
                             暂无归档！
@@ -108,7 +110,7 @@
                     <ul>
                         {% for category in category_list %}
                         <li>
-                            <a href="#">{{ category.name }} <span class="post-count">(13)</span></a>
+                            <a href="{% url 'blog:category' category.pk %}">{{ category.name }} <span class="post-count">({{ category.num_posts }})</span></a>
                         </li>
                         {% empty %}
                             暂无分类！
@@ -118,37 +120,15 @@
 
                 <div class="widget widget-tag-cloud">
                     <h3 class="widget-title">标签云</h3>
+                    {% get_tags as tag_list %}
                     <ul>
+                        {% for tag in tag_list %}
                         <li>
-                            <a href="#">Django</a>
+                            <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}</a>
                         </li>
-                        <li>
-                            <a href="#">Python</a>
-                        </li>
-                        <li>
-                            <a href="#">Java</a>
-                        </li>
-                        <li>
-                            <a href="#">笔记</a>
-                        </li>
-                        <li>
-                            <a href="#">文档</a>
-                        </li>
-                        <li>
-                            <a href="#">AngularJS</a>
-                        </li>
-                        <li>
-                            <a href="#">CSS</a>
-                        </li>
-                        <li>
-                            <a href="#">JavaScript</a>
-                        </li>
-                        <li>
-                            <a href="#">Snippet</a>
-                        </li>
-                        <li>
-                            <a href="#">jQuery</a>
-                        </li>
+                        {% empty %}
+                        暂无标签！
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="rss">
@@ -162,9 +142,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <p class="copyright">&copy 2018 - 采集自<a href="http://www.cssmoban.com/"
-                                                        target="_blank" title="模板之家">模板之家</a>
-                    - 由idd自<a href="http://zmrenwu.com/" title="网页模板" target="_blank">追梦人物的博客</a>学习修改，技术支持：Python3.6、Django2.0
+                <p class="copyright">&copy 2018 青年老屋<br>
+                    logo源自<a href="http://www.techuangyi.com/tzone-16971.html" target="_blank">特创易-HStudio</a>丨技术支持：Python3.6、Django2.0
                 </p>
             </div>
         </div>
@@ -176,7 +155,7 @@
     <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
     <nav>
         <ul>
-            <li><a href="index.html">首页</a></li>
+            <li><a href="/">首页</a></li>
             <li><a href="full-width.html">博客</a></li>
             <li><a href="about.html">关于</a></li>
             <li><a href="contact.html">联系</a></li>
@@ -184,7 +163,7 @@
     </nav>
 </div>
 
-<script src="js/script.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
 
 </body>
 </html>
