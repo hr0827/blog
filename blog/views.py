@@ -4,11 +4,16 @@ from blog.models import *
 from comments.forms import *
 from django.db.models import Q
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.views.generic import ListView
 
 
 def index(request):
-    post_list = Post.objects.all()
+    posts = Post.objects.all()
+    page = request.GET.get('page')
+    paginator = Paginator(posts, 5)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
     return render(request, 'index.html', locals())
 
 
@@ -33,19 +38,37 @@ def detail(request, pk):
 
 
 def archives(request, year, month):
-    post_list = Post.objects.filter(created_time__year=year)  # , created_time__month=month
+    posts = Post.objects.filter(created_time__year=year)  # , created_time__month=month
+    page = request.GET.get('page')
+    paginator = Paginator(posts, 5)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
     return render(request, 'index.html', context={'post_list': post_list})
 
 
 def category(request, pk):
     cate = get_object_or_404(Category, pk=pk)
-    post_list = Post.objects.filter(category=cate)
+    posts = Post.objects.filter(category=cate)
+    page = request.GET.get('page')
+    paginator = Paginator(posts, 5)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
     return render(request, 'index.html', context={'post_list': post_list})
 
 
 def tag(request, pk):
     tag = get_object_or_404(Tag, pk=pk)
-    post_list = Post.objects.filter(tag=tag)
+    posts = Post.objects.filter(tag=tag)
+    page = request.GET.get('page')
+    paginator = Paginator(posts, 5)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
     return render(request, 'index.html', context={'post_list': post_list})
 
 
@@ -63,11 +86,3 @@ def search(request):
 
 def about(request):
     return render(request, 'about.html')
-
-
-def contact(request):
-    return render(request, 'contact.html')
-
-
-def full(request):
-    return render(request, 'full-width.html')

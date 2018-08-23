@@ -5,12 +5,12 @@
                     <header class="entry-header">
                         <h1 class="entry-title">{{ post.title }}</h1>
                         <div class="entry-meta">
-                            <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                            <span class="post-category"><a href="#"><span class="icon ion-ios-paper-outline"></span>  {{ post.category.name }}丨</a></span>
                             <span class="post-date"><a href="#"><time class="entry-date"
-                                                                      datetime="{{ post.created_time }}">{{ post.created_time }}</time></a></span>
-                            <span class="post-author"><a href="#">{{ post.author }}</a></span>
-                            <span class="comments-link"><a href="#">{{ post.comments_set.count }}评论</a></span>
-                            <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                                                                      datetime="{{ post.created_time }}"><span class="icon ion-ios-clock-outline"></span>  {{ post.created_time }}丨</time></a></span>
+                            <span class="post-author"><a href="#"><span class="icon ion-android-person"></span>  {{ post.author }}丨</a></span>
+                            <span class="comments-link"><a href="#"><span class="icon ion-chatbox"></span>  {{ post.comments_set.count }}丨</a></span>
+                            <span class="views-count"><a href="#"><span class="icon ion-eye"></span>  {{ post.views }}</a></span>
                         </div>
                     </header>
                     <div>
