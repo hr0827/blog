@@ -903,3 +903,7 @@ img {
 .current a {
     color: red;
 }
+
+ul{
+    list-style: none;
+}
